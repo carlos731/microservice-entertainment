@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2020",                             // Alvo de ECMAScript mais recente
+    "module": "commonjs",                          // Sistema de módulos CommonJS para Node.js
+    "outDir": "./dist",                            // Diretório de saída para os arquivos compilados
+    "rootDir": "./src",                            // Diretório raiz dos arquivos TypeScript
+    "strict": true,                               // Habilita todas as opções de verificação estrita
+    "esModuleInterop": true,                      // Suporte para importações de módulos CommonJS
+    "forceConsistentCasingInFileNames": true,     // Consistência de casing em nomes de arquivos
+    "skipLibCheck": true,                         // Pular verificação de tipos para arquivos .d.ts
+    "resolveJsonModule": true,                    // Permite importar arquivos JSON
+    "isolatedModules": true                       // Garante que cada arquivo pode ser tratado como um módulo
+  },
+  "include": ["src/**/*.ts"],                      // Inclui todos os arquivos TypeScript na pasta src
+  "exclude": ["node_modules"]                      // Exclui a pasta node_modules da compilação
+}
