@@ -5,6 +5,8 @@ import com.microservice.entertainment.models.entity.Person;
 import com.microservice.entertainment.models.enums.ProfessionType;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString

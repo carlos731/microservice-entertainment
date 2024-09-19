@@ -7,8 +7,8 @@ export class FileModel {
   size: number;
   byte: Uint8Array;
   contentType: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: number;
+  updatedAt?: number;
 
   constructor(
     id: string,
@@ -17,8 +17,8 @@ export class FileModel {
     size: number,
     byte: Uint8Array,
     content_type: string,
-    createdAt: Date,
-    updatedAt?: Date
+    createdAt: number,
+    updatedAt?: number
   ) {
     this.id = id;
     this.name = name;
@@ -48,6 +48,30 @@ export class FileModel {
     ];
 
     await pool.query(query, values);
+  }
+
+  // Método para atualizar um arquivo no banco de dados
+  static async update(file: FileModel): Promise<void> {
+    const query = `
+      UPDATE tb_files
+      SET name = $2, extension = $3, size = $4, byte = $5, content_type = $6, updated_at = $7
+      WHERE id = $1
+    `;
+    const values = [
+      file.id,
+      file.name,
+      file.extension,
+      file.size,
+      file.byte,
+      file.contentType,
+      file.updatedAt || null
+    ];
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      throw new Error(`File with id ${file.id} not found`);
+    }
   }
 
   // Método para buscar todos os arquivos

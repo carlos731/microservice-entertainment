@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EntertainmentTypeRequest {
+    private Long id;
     @NotNull(message = "The name field is required!")
     private String name;
 }

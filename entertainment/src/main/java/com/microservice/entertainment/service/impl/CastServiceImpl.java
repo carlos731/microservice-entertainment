@@ -64,7 +64,7 @@ public class CastServiceImpl implements CastService {
         List<Object[]> rawResults = repository.findCastByEntertainmentIdRaw(entertainmentId);
         return rawResults.stream()
                 .map(result -> new CastPersonResponse(
-                        ((Number) result[0]).longValue(), // cast_id
+                        ((Long) result[0]), // cast_id
                         ((Number) result[1]).longValue(), // person_id
                         (String) result[2], // character
                         (String) result[3], // name

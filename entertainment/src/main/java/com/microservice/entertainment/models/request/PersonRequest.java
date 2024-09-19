@@ -4,13 +4,14 @@ import com.microservice.entertainment.models.enums.ProfessionType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonRequest {
-    private Long id;
     @NotNull(message = "The name field is required!")
     private String name;
     @NotNull(message = "The description field is required!")

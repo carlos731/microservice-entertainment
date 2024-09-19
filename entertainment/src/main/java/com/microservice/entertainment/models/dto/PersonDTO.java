@@ -3,6 +3,8 @@ package com.microservice.entertainment.models.dto;
 import com.microservice.entertainment.models.enums.ProfessionType;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString

@@ -1,8 +1,6 @@
 package com.microservice.entertainment.repository;
 
-import com.microservice.entertainment.models.dto.CastDTO;
 import com.microservice.entertainment.models.entity.Cast;
-import com.microservice.entertainment.models.response.CastPersonResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -3,6 +3,8 @@ package com.microservice.entertainment.models.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString

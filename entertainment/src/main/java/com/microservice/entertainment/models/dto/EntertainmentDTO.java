@@ -2,7 +2,6 @@ package com.microservice.entertainment.models.dto;
 
 import com.microservice.entertainment.models.entity.EntertainmentType;
 import com.microservice.entertainment.models.entity.Genre;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;

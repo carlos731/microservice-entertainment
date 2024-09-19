@@ -1,7 +1,6 @@
 package com.microservice.entertainment.repository;
 
 import com.microservice.entertainment.models.entity.Entertainment;
-import com.microservice.entertainment.models.entity.Genre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

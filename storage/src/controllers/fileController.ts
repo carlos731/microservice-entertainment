@@ -15,19 +15,34 @@ export const uploadMultipleFiles = async (req: Request, res: Response) => {
         }
 
         const files = req.files as Express.Multer.File[];
-        const fileModels = files.map(file => new FileModel(
-            uuidv4(), // Gera um ID único
-            file.originalname,
-            file.originalname.split('.').pop() || '',
-            file.size,
-            new Uint8Array(file.buffer),
-            file.mimetype,
-            new Date()
-        ));
+        const baseUrl = 'http://localhost:9000/storage/';
+        const fileUrls: string[] = [];
 
-        await Promise.all(fileModels.map(file => FileModel.create(file)));
+        for (const file of files) {
+            const { originalname, mimetype, size, buffer } = file;
 
-        res.status(200).json({ message: 'Arquivos enviados e salvos com sucesso' });
+            const newFile = new FileModel(
+                uuidv4(),
+                originalname,
+                originalname.split('.').pop() || '',
+                size,
+                new Uint8Array(buffer),
+                mimetype,
+                Date.now()
+            );
+
+            await FileModel.create(newFile);
+
+            const fileType = mimetype.startsWith('image/') ? 'image' : 'video';
+            const url = `${baseUrl}${fileType}/${newFile.id}`;
+            
+            fileUrls.push(url);
+        }
+
+        res.status(200).json({
+            message: 'Arquivos enviados e salvos com sucesso',
+            files: fileUrls
+        });
     } catch (error) {
         console.error('Erro ao fazer upload dos arquivos', error);
         res.status(500).json({ error: 'Falha ao fazer upload dos arquivos' });
@@ -49,7 +64,7 @@ export const uploadFile = async (req: Request, res: Response) => {
             size,
             new Uint8Array(buffer),
             mimetype,
-            new Date()
+            Date.now()
         );
 
         await FileModel.create(newFile);
@@ -64,6 +79,49 @@ export const uploadFile = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Erro ao fazer upload do arquivo', error);
         res.status(500).json({ error: 'Falha ao fazer upload do arquivo' });
+    }
+};
+
+export const updateFileById = async (req: Request, res: Response) => {
+    try {
+        const fileId = req.params.id;
+
+        if (!fileId) {
+            return res.status(400).json({ error: 'ID do arquivo não fornecido' });
+        }
+
+        const file = await FileModel.findById(fileId);
+
+        if (!file) {
+            return res.status(404).json({ error: 'Arquivo não encontrado' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'Nenhum arquivo enviado para atualização' });
+        }
+
+        const { originalname, mimetype, size, buffer } = req.file;
+
+        file.name = originalname;
+        file.extension = originalname.split('.').pop() || '';
+        file.size = size;
+        file.byte = new Uint8Array(buffer);
+        file.contentType = mimetype;
+        file.updatedAt = Date.now();
+
+        await FileModel.update(file);
+
+        const baseUrl = 'http://localhost:9000/storage/';
+        const fileType = mimetype.startsWith('image/') ? 'image' : 'video';
+        const url = `${baseUrl}${fileType}/${fileId}`;
+
+        res.status(200).json({
+            message: 'File updated successfully.',
+            url
+        });
+    } catch (error) {
+        console.error('Erro ao atualizar o arquivo', error);
+        res.status(500).json({ error: 'Falha ao atualizar o arquivo' });
     }
 };
 

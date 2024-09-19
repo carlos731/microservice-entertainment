@@ -2,7 +2,6 @@ package com.microservice.entertainment.service.impl;
 
 import com.microservice.entertainment.exception.CustomException;
 import com.microservice.entertainment.models.dto.EntertainmentTypeDTO;
-import com.microservice.entertainment.models.entity.Entertainment;
 import com.microservice.entertainment.models.entity.EntertainmentType;
 import com.microservice.entertainment.models.enums.ErrorType;
 import com.microservice.entertainment.models.mapper.EntertainmentTypeMapper;

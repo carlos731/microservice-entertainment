@@ -13,6 +13,8 @@ const secretKey = process.env.SECRET_KEY_JWT || 'minhachavesecretadetoken';
 }
 */
 
+/* Bearer token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlcyI6WyJhZG1pbiIsInN1cGVydXNlciJdLCJwZXJtaXNzaW9ucyI6WyJ1cGxvYWRfZmlsZSIsImRlbGV0ZV9maWxlIiwidXBkYXRlX2ZpbGUiLCJnZXRfZmlsZSJdfQ.lRB_SBI2o0GD6Tn9g3Q3PAYUPNYYDlXYkFvieMlVcCI */
+
 // Middleware de autenticação
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];

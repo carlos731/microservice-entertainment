@@ -1,7 +1,6 @@
 package com.microservice.entertainment.service;
 
 import com.microservice.entertainment.models.dto.EntertainmentDTO;
-import com.microservice.entertainment.models.entity.Genre;
 import com.microservice.entertainment.models.request.EntertainmentFilterRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
