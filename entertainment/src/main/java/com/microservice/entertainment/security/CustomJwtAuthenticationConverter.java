@@ -23,6 +23,9 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, JwtAuthe
 
     private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         List<String> permissions = jwt.getClaimAsStringList("permissions");
+        if (permissions == null) {
+            return List.of();
+        }
         return permissions.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

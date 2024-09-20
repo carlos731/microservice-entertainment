@@ -270,7 +270,7 @@ public class EntertainmentController {
                     )
             )
     })
-    @PreAuthorize("hasAuthority('delete')")
+    @PreAuthorize("hasAuthority('delete:entertainment')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

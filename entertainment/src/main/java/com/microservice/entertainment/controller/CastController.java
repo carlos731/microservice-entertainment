@@ -231,7 +231,7 @@ public class CastController {
                     )
             )
     })
-    @PreAuthorize("hasAuthority('delete')")
+    @PreAuthorize("hasAuthority('delete:entertainment')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

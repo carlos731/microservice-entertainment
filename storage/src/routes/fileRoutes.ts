@@ -60,7 +60,7 @@ const upload = multer({ storage: storage });
  *       500:
  *         description: Erro no servidor
  */
-router.post('/upload-multiple', authenticateToken, authorizePermissions('upload_file'), upload.array('files'), uploadMultipleFiles);
+router.post('/upload-multiple', authenticateToken, authorizePermissions('upload:file'), upload.array('files'), uploadMultipleFiles);
 
 /**
  * @swagger
@@ -348,7 +348,7 @@ router.get('/download/:id', downloadFileById);
  *       500:
  *         description: Erro no servidor
  */
-router.delete('/delete/:id', authenticateToken, authorizePermissions('delete_file'), deleteFileById);
+router.delete('/delete/:id', authenticateToken, authorizePermissions('delete:file'), deleteFileById);
 
 /**
  * @swagger
