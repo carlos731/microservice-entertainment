@@ -39,19 +39,20 @@ class AuthController {
             const roles = await User.findRolesByUserId(user.id);
             const permissions = await User.findAllPermissionsByUserId(user.id);
 
-            user.roles = roles.map(role => role.role_name);
-            user.permissions = permissions.map(permission => permission.permission_name);
+            user.roles = roles.map(role => role.name);
+            user.permissions = permissions.map(permission => permission.name);
 
             const tokenPayload = {
-                id: user.id,
+                sub: user.id,
                 is_super: user.is_super,
-                roles: roles.map(role => role.role_name),
-                permissions: permissions.map(permission => permission.permission_name)
+                roles: roles.map(role => role.name),
+                permissions: permissions.map(permission => permission.name)
             };
 
-            const token = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ sub: user.id }, jwtscretekey, { expiresIn: '7d' });
 
-            res.status(201).json({ user, token });
+            res.status(200).json({ user, accessToken, refreshToken });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Erro ao registrar usuário.' });
@@ -87,14 +88,14 @@ class AuthController {
             const tokenPayload = {
                 sub: user.id,
                 is_super: user.is_super,
-                roles: roles.map(role => role.role_name),
-                permissions: permissions.map(permission => permission.permission_name)
+                roles: roles.map(role => role.name),
+                permissions: permissions.map(permission => permission.name)
             };
 
-            const token = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
             const refreshToken = jwt.sign({ sub: user.id }, jwtscretekey, { expiresIn: '7d' });
 
-            res.status(200).json({ /*user,*/ token, refreshToken });
+            res.status(200).json({ /*user,*/ accessToken, refreshToken });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Erro ao realizar login.' });
@@ -122,18 +123,18 @@ class AuthController {
             const permissions = await User.findAllPermissionsByUserId(userFind.id);
 
             const tokenPayload = {
-                id: userFind.id,
+                sub: userFind.id,
                 is_super: userFind.is_super,
-                roles: roles.map(role => role.role_name),
-                permissions: permissions.map(permission => permission.permission_name)
+                roles: roles.map(role => role.name),
+                permissions: permissions.map(permission => permission.name)
             };
 
-            const newAccessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
-            const newRefreshToken = jwt.sign({ sub: user.id }, jwtscretekey, { expiresIn: '7d' });
+            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ sub: userFind.id }, jwtscretekey, { expiresIn: '7d' });
 
             res.status(200).json({
-                accessToken: newAccessToken,
-                refreshToken: newRefreshToken,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
             });
         });
     }
@@ -214,10 +215,11 @@ class AuthController {
 
     static async resetPassword(req, res) {
         const { newPassword } = req.body;
-        const userId = req.tokenDecoded.id;
+        const email = req.tokenDecoded.email;
+        console.log(email);
 
         try {
-            const user = await User.findById(userId);
+            const user = await User.findByEmail(email);
             if (!user) {
                 return res.status(404).json({ error: 'Usuário não encontrado.' });
             }
@@ -253,12 +255,12 @@ class AuthController {
                 return res.status(400).json({ error: 'OTP expirado.' });
             }
 
-            const tokenPayload = { id: user.id, email: user.email };
-            const token = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const tokenPayload = { email: user.email };
+            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
 
             await User.clearOtp(user.id);
 
-            res.status(200).json({ message: 'OTP válido.', token });
+            res.status(200).json({ message: 'OTP válido.', accessToken });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Erro ao verificar OTP.' });

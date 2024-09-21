@@ -24,9 +24,9 @@ class UserController {
             const rolesFind = await User.findRolesByUserId(newUser.id);
             const permissionsFind = await User.findAllPermissionsByUserId(newUser.id);
 
-            newUser.roles = rolesFind.map(role => role.role_name);
-            newUser.permissions = permissionsFind.map(permission => permission.permission_name);
-            
+            newUser.roles = rolesFind.map(role => role.name);
+            newUser.permissions = permissionsFind.map(permission => permission.name);
+
             res.status(201).json(newUser);
         } catch (error) {
             console.error(error);
@@ -51,8 +51,8 @@ class UserController {
             const rolesFind = await User.findRolesByUserId(updatedUser.id);
             const permissionsFind = await User.findAllPermissionsByUserId(updatedUser.id);
 
-            updatedUser.roles = rolesFind.map(role => role.role_name);
-            updatedUser.permissions = permissionsFind.map(permission => permission.permission_name);
+            updatedUser.roles = rolesFind.map(role => role.name);
+            updatedUser.permissions = permissionsFind.map(permission => permission.name);
 
             res.status(200).json(updatedUser);
         } catch (error) {
@@ -79,6 +79,13 @@ class UserController {
             if (!user) {
                 return res.status(404).json({ error: 'Usuário não encontrado.' });
             }
+
+            const roles = await User.findRolesByUserId(user.id);
+            const permissions = await User.findAllPermissionsByUserId(user.id);
+
+            user.roles = roles.map(role => role.name);
+            user.permissions = permissions.map(permission => permission.name);
+
             res.status(200).json(user);
         } catch (error) {
             console.error(error);

@@ -12,7 +12,7 @@ class Role {
 
     static async create(name) {
         const id = uuidv4();
-
+        console.log(name);
         const query = `
             INSERT INTO tb_role (id, name) 
             VALUES ($1, $2) 
@@ -31,7 +31,7 @@ class Role {
         return result.rows[0];
     }
 
-    async findById(id) {
+    static async findById(id) {
         const query = 'SELECT * FROM tb_role WHERE id = $1';
         const values = [id];
         const result = await pool.query(query, values);
@@ -42,6 +42,13 @@ class Role {
         const query = 'SELECT * FROM tb_role';
         const result = await pool.query(query);
         return result.rows;
+    }
+
+    static async deleteById(id) {
+        const query = 'DELETE FROM tb_role WHERE id = $1';
+        const values = [id];
+        const result = await pool.query(query, values);
+        return result.rowCount > 0;
     }
 
     static async assignRolesToUser(userId, roleIds) {

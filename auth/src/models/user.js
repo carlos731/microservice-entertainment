@@ -117,25 +117,6 @@ class User {
         return result.rows[0];
     }
 
-    // static async updateById(id, firstname, lastname, email, avatar, isActive, isBlocked, isSuper, roles, permissions) {
-    //     const updatedAt = Date.now();
-
-    //     const query = `
-    //         UPDATE tb_user 
-    //         SET firstname = $1, lastname = $2, email = $3, avatar = $4, updated_at = $5, is_active = $6, is_blocked = $7, is_super = $8
-    //         WHERE id = $9
-    //         RETURNING id, firstname, lastname, email, avatar, created_at, updated_at, last_login, is_super, is_active, is_blocked
-    //     `;
-    //     const values = [firstname, lastname, email, avatar, updatedAt, isActive, isBlocked, isSuper, id];
-
-    //     const result = await pool.query(query, values);
-
-    //     if (result.rowCount > 0) {
-    //         return result.rows[0];
-    //     }
-    //     return null;
-    // }
-
     static async updateById(id, firstname, lastname, email, avatar, isActive, isBlocked, isSuper, roles, permissions) {
         const updatedAt = Date.now();
             
@@ -160,7 +141,7 @@ class User {
                     VALUES ($1, $2, $3)
                 `;
                 for (const roleId of roles) {
-                    const roleIdUUID = uuidv4(); // Gera um novo UUID para a relação
+                    const roleIdUUID = uuidv4();
                     await pool.query(roleInsertQuery, [roleIdUUID, updatedUser.id, roleId]);
                 }
             }
@@ -173,7 +154,7 @@ class User {
                     VALUES ($1, $2, $3)
                 `;
                 for (const permissionId of permissions) {
-                    const permissionIdUUID = uuidv4(); // Gera um novo UUID para a relação
+                    const permissionIdUUID = uuidv4();
                     await pool.query(permissionInsertQuery, [permissionIdUUID, updatedUser.id, permissionId]);
                 }
             }
@@ -211,7 +192,7 @@ class User {
 
     static async findRolesByUserId(userId) {
         const query = `
-            SELECT r.name AS role_name
+            SELECT r.id AS id, r.name AS name
             FROM tb_user u
             JOIN tb_user_role ur ON u.id = ur.user_id
             JOIN tb_role r ON ur.role_id = r.id
@@ -225,7 +206,7 @@ class User {
 
     static async findPermissionsByRoleId(roleId) {
         const query = `
-            SELECT p.name AS permission_name
+            SELECT p.id AS id, p.name AS name
             FROM tb_role r
             JOIN tb_role_permission rp ON r.id = rp.role_id
             JOIN tb_permission p ON rp.permission_id = p.id
@@ -239,7 +220,7 @@ class User {
 
     static async findPermissionsByUserId(userId) {
         const query = `
-            SELECT p.name AS permission_name
+            SELECT p.id AS id, p.name AS name
             FROM tb_user u
             JOIN tb_user_permission up ON u.id = up.user_id
             JOIN tb_permission p ON up.permission_id = p.id
@@ -253,7 +234,7 @@ class User {
 
     static async findAllPermissionsByUserId(userId) {
         const query = `
-            SELECT DISTINCT p.name AS permission_name
+            SELECT DISTINCT p.id AS id, p.name AS name
             FROM tb_user u
             JOIN tb_user_role ur ON u.id = ur.user_id
             JOIN tb_role r ON ur.role_id = r.id
@@ -263,7 +244,7 @@ class User {
                 
             UNION
                 
-            SELECT DISTINCT p.name AS permission_name
+            SELECT DISTINCT p.id AS id, p.name AS name
             FROM tb_user u
             JOIN tb_user_permission up ON u.id = up.user_id
             JOIN tb_permission p ON up.permission_id = p.id
@@ -271,7 +252,7 @@ class User {
                 
             UNION
                 
-            SELECT DISTINCT p.name AS permission_name
+            SELECT DISTINCT p.id AS id, p.name AS name
             FROM tb_permission p
             WHERE EXISTS (
                 SELECT 1 
