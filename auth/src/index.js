@@ -3,7 +3,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const corsConfig = require('./config/cors');
 const pool = require('./config/db');
-const route = require('./routes/routes');
+
+const route = require('./routes/authRoutes');
+const userRoute = require('./routes/userRoutes');
+
 
 require('dotenv').config();
 dotenv.config();
@@ -15,7 +18,8 @@ app.use(cors(corsConfig));
 app.use(express.json());
 
 // routes:
-app.use('', route);
+app.use('/auth', route);
+app.use('/user', userRoute);
 
 app.get('/', (req, res) => {
     res.send('Server running with connection to PostgreSQL');

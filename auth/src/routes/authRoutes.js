@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controller/userController');
+const authController = require('../controller/authController');
 const { body } = require('express-validator');
+const { authenticateToken, authorizePermissions } = require('../middleware/authenticateToken');
 
 const validateRegister = [
     body('firstname').not().isEmpty().withMessage('Name is required'),
@@ -19,16 +20,12 @@ const validateLogin = [
         .isStrongPassword().withMessage('Password must contain at least one uppercase, one lowercase, and one symbol.')
 ]
 
-// AuthRoutes:
-router.post('/auth/login', validateLogin, userController.login);
-router.post('/auth/register', validateRegister, userController.register);
-router.post('/auth/refresh-token', userController.refreshToken);
-router.get('/auth/verify-token', userController.verifyToken);
-// router.post('/auth/forgot-password', authController.forgotPassword);
-// router.post('/auth/verify-otp', authController.verifyPasswordResetOTP);
-// router.post('/auth/reset-password', authController.resetPassword);
-
-// UserRoutes:
-router.get('/user/findAll', userController.getAllUsers);
+router.post('/login', validateLogin, authController.login);
+router.post('/register', validateRegister, authController.register);
+router.post('/refresh-token', authController.refreshToken);
+router.get('/verify-token', authController.verifyToken);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/verify-otp', authController.verifyOtp);
+router.put('/reset-password', authenticateToken, authController.resetPassword);
 
 module.exports = router;
