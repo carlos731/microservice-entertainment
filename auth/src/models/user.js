@@ -34,6 +34,25 @@ class User {
         this.isSuper = isSuper;
     }
 
+    static fromData(userData) {
+        return new User(
+            userData.id,
+            userData.firstname,
+            userData.lastname,
+            userData.email,
+            userData.password,
+            userData.avatar,
+            userData.created_at,
+            userData.updated_at,
+            userData.last_login,
+            userData.otp_expires,
+            userData.otp,
+            userData.is_active,
+            userData.is_blocked,
+            userData.is_super
+        );
+    }
+
     static async add(firstname, lastname, email, password, avatar, isActive, isBlocked, isSuper, roles, permissions) {
         const id = uuidv4();
         const query = `

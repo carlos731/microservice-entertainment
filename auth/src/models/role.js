@@ -12,7 +12,6 @@ class Role {
 
     static async create(name) {
         const id = uuidv4();
-        console.log(name);
         const query = `
             INSERT INTO tb_role (id, name) 
             VALUES ($1, $2) 
@@ -20,6 +19,13 @@ class Role {
         `;
         const values = [id, name];
 
+        const result = await pool.query(query, values);
+        return result.rows[0];
+    }
+
+    static async updateById(id, name) {
+        const query = `UPDATE tb_role SET name = $1 WHERE id = $2 RETURNING id, name`;
+        const values = [name, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     }

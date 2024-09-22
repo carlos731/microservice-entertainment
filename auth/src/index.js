@@ -8,6 +8,7 @@ const pool = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
+const permissionRoutes = require('./routes/permissionRoutes');
 
 
 require('dotenv').config();
@@ -25,6 +26,7 @@ app.use(limiter);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/role', roleRoutes);
+app.use('/permission', permissionRoutes);
 
 
 app.get('/', (req, res) => {
