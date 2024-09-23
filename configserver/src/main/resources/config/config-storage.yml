@@ -1,0 +1,23 @@
+build:
+  version: "1.0"
+
+config:
+  server:
+    port: "{cipher}5b8581b6d6efda654aad047b0c1039e52d417550ea4270815310ae0c83401e15"
+    message: "Welcome to the authentication service"
+    contactDetails:
+      name: "Carlos Henrique"
+      email: "carlos@gmail.com"
+    onCallSupport:
+      - +55 (21) 99665-1234
+  db:
+    name: "{cipher}936b9d2fb8af2efb45d686d72b6c058ea5e04eed60b717a66bc35b9432391c4e"
+    user: "{cipher}4244ee4f97b257cc438c8d45bf4fda5d888c1a1fbc9517948aa9d02462f0bed0"
+    password: "{cipher}3d67231e6e6d30a394a58bff21edc73a94a75f41224b589695d914528b7b2ac5"
+    host: "{cipher}304d9da268faded6615ba2d167b66d34b9fa28a8829fe0e6f25bc62b1e0a7f90"
+    port: "{cipher}bd2648f6af3cf00ac43053e25ac6db0db794d9777453da8922bb272fd83e7ffb"
+  jwt:
+    secret: "{cipher}81c13fa35aba36d1617c957320bf379baf291084ee65563b9fd67e562604d70f5dbb0642f3590a5267b3e8b51b3746ab941d8df9534336a81ab8a4096470136a061a9d63baef9dddd9f2028bb8e230ff"
+  bcrypt:
+    rounds: "{cipher}d1bfcea0666449e3acaa93d294ce6e0183432cdc4d436e340d30e49ce4e34d41"
+    key: "{cipher}e8e17d7e06d803e7b5078e82e635a2950d98123afd8f4406d318e536cc78db18b812f02cdb95b383cb3c89dfc7d17098"

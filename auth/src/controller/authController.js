@@ -8,6 +8,8 @@ const saltRounds = parseInt(process.env.BYCRIPT) || 10;
 const secretKey = process.env.BYCRIPT_KEY || 'sua_chave_secreta';
 const jwtscretekey = process.env.JWT_SECRET;
 
+const { getSecretJwt } = require('../context/configContext');
+
 class AuthController {
     static async register(req, res) {
         const errors = validationResult(req);
@@ -49,8 +51,8 @@ class AuthController {
                 permissions: permissions.map(permission => permission.name)
             };
 
-            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
-            const refreshToken = jwt.sign({ sub: user.id }, jwtscretekey, { expiresIn: '7d' });
+            const accessToken = jwt.sign(tokenPayload, getSecretJwt(), { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ sub: user.id }, getSecretJwt(), { expiresIn: '7d' });
 
             res.status(200).json({ user, accessToken, refreshToken });
         } catch (error) {
@@ -92,8 +94,8 @@ class AuthController {
                 permissions: permissions.map(permission => permission.name)
             };
 
-            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
-            const refreshToken = jwt.sign({ sub: user.id }, jwtscretekey, { expiresIn: '7d' });
+            const accessToken = jwt.sign(tokenPayload, getSecretJwt(), { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ sub: user.id }, getSecretJwt(), { expiresIn: '7d' });
 
             res.status(200).json({ /*user,*/ accessToken, refreshToken });
         } catch (error) {
@@ -109,7 +111,7 @@ class AuthController {
             return res.status(403).json({ error: 'Refresh token não fornecido.' });
         }
 
-        jwt.verify(token, jwtscretekey, async (err, user) => {
+        jwt.verify(token, getSecretJwt(), async (err, user) => {
             if (err) {
                 return res.status(403).json({ error: 'Refresh token inválido.' });
             }
@@ -129,8 +131,8 @@ class AuthController {
                 permissions: permissions.map(permission => permission.name)
             };
 
-            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
-            const refreshToken = jwt.sign({ sub: userFind.id }, jwtscretekey, { expiresIn: '7d' });
+            const accessToken = jwt.sign(tokenPayload, getSecretJwt(), { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ sub: userFind.id }, getSecretJwt(), { expiresIn: '7d' });
 
             res.status(200).json({
                 accessToken: accessToken,
@@ -186,7 +188,7 @@ class AuthController {
             return res.status(403).json({ error: 'Token não fornecido.' });
         }
 
-        jwt.verify(token, jwtscretekey, (err, decoded) => {
+        jwt.verify(token, getSecretJwt(), (err, decoded) => {
             if (err) {
                 return res.status(401).json({ error: 'Token inválido.' });
             }
@@ -256,7 +258,7 @@ class AuthController {
             }
 
             const tokenPayload = { email: user.email };
-            const accessToken = jwt.sign(tokenPayload, jwtscretekey, { expiresIn: '15m' });
+            const accessToken = jwt.sign(tokenPayload, getSecretJwt(), { expiresIn: '15m' });
 
             await User.clearOtp(user.id);
 

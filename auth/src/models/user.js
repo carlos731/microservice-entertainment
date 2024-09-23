@@ -1,4 +1,5 @@
-const pool = require('../config/db');
+// const pool = require('../config/db');
+const { getPool } = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 
 class User {
@@ -61,7 +62,7 @@ class User {
             RETURNING id, firstname, lastname, email, avatar, created_at, updated_at, last_login, is_active, is_blocked, is_super
         `;
         const values = [id, firstname, lastname, email, password, avatar, isActive, isBlocked, isSuper];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         const newUser = result.rows[0];
 
@@ -73,6 +74,7 @@ class User {
             `;
             for (const roleId of roles) {
                 const id = uuidv4();
+                const pool = getPool();
                 await pool.query(roleInsertQuery, [id, newUser.id, roleId]);
             }
         }
@@ -85,6 +87,7 @@ class User {
             `;
             for (const permissionId of permissions) {
                 const id = uuidv4();
+                const pool = getPool();
                 await pool.query(permissionInsertQuery, [id, newUser.id, permissionId]);
             }
         }
@@ -101,13 +104,14 @@ class User {
             RETURNING id, firstname, lastname, email, avatar, created_at, updated_at, last_login, is_active, is_blocked, is_super
         `;
         const values = [id, firstname, lastname, email, password, avatar];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
 
     static async findAll() {
         const query = "SELECT * FROM tb_user";
+        const pool = getPool();
         const result = await pool.query(query);
         return result.rows;
     }
@@ -119,7 +123,7 @@ class User {
             WHERE id = $1
         `;
         const values = [id];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
@@ -132,11 +136,13 @@ class User {
         `;
         const values = [email];
 
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
 
     static async updateById(id, firstname, lastname, email, avatar, isActive, isBlocked, isSuper, roles, permissions) {
+        const pool = getPool();
         const updatedAt = Date.now();
             
         const query = `
@@ -192,7 +198,7 @@ class User {
             WHERE id = $3
         `;
         const values = [updatedAt, newPassword, id];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
 
         if (result.rowCount > 0) {
@@ -204,7 +210,7 @@ class User {
     static async deleteById(id) {
         const query = 'DELETE FROM tb_user WHERE id = $1';
         const values = [id];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rowCount > 0;
     }
@@ -219,6 +225,7 @@ class User {
         `;
         const values = [userId];
 
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows;
     }
@@ -232,7 +239,8 @@ class User {
             WHERE r.id = $1
         `;
         const values = [roleId];
-
+        
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows;
     }
@@ -246,7 +254,7 @@ class User {
             WHERE u.id = $1
         `;
         const values = [userId];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows;
     }
@@ -280,7 +288,8 @@ class User {
             )
         `;
         const values = [userId];
-
+        
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows;
     }
@@ -288,12 +297,14 @@ class User {
     static async setOtpAndExpires(userId, otp, otpExpires) {
         const query = 'UPDATE tb_user SET otp = $1, otp_expires = $2 WHERE id = $3';
         const values = [otp, otpExpires, userId];
+        const pool = getPool();
         await pool.query(query, values);
     }
 
     static async clearOtp(userId) {
         const query = 'UPDATE tb_user SET otp = NULL, otp_expires = NULL WHERE id = $1';
         const values = [userId];
+        const pool = getPool();
         await pool.query(query, values);
     }
 }

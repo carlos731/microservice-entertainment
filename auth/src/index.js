@@ -1,41 +1,49 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const corsConfig = require('./config/cors');
 const limiter = require('./config/limiter');
-const pool = require('./config/db');
+// const pool = require('./config/db'); // Agora irá usar as configurações do configContext
+const axios = require('axios');
+const configServer = require('./config/configServer');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const permissionRoutes = require('./routes/permissionRoutes');
 
-
-require('dotenv').config();
-dotenv.config();
+const { getServerPort } = require('./context/configContext');
+const { createPool } = require('./config/db');
 
 const app = express();
 
-app.use(cors(corsConfig));
+// Função para iniciar o servidor
+const startServer = async () => {
+    try {
+        // Carrega as configurações do servidor
+        await configServer();
 
-app.use(express.json());
+        await createPool();
 
-app.use(limiter);
+        // Agora que as configurações estão carregadas, você pode usar o pool
+        app.use(cors());
+        app.use(express.json());
+        app.use(limiter);
 
-// routes:
-app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
-app.use('/role', roleRoutes);
-app.use('/permission', permissionRoutes);
+        // Rotas
+        app.use('/auth', authRoutes);
+        app.use('/user', userRoutes);
+        app.use('/role', roleRoutes);
+        app.use('/permission', permissionRoutes);
 
+        const port = getServerPort() || process.env.PORT || 8000;
+        app.listen(port, () => {
+            console.log(`Server running on port: ${port}`);
+        });
+    } catch (error) {
+        console.error('Failed to start the server:', error);
+        process.exit(1);
+    }
+};
 
-app.get('/', (req, res) => {
-    res.send('Server running with connection to PostgreSQL');
-});
-
-const port = process.env.PORT || 8000;
-app.listen(port, () => {
-    console.log(`Server running on the port ${port}`);
-});
+startServer();
 
 module.exports = app;

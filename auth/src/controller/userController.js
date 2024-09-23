@@ -43,6 +43,11 @@ class UserController {
                 return res.status(404).json({ error: 'Usuário não encontrado.' });
             }
 
+            const existingUser = await User.findByEmail(user.email);
+            if (existingUser) {
+                return res.status(400).json({ error: 'Email já está em uso.' });
+            }
+
             const updatedUser = await User.updateById(id, firstname, lastname, email, avatar, isActive, isBlocked, isSuper, roles, permissions);
             if (!updatedUser) {
                 return res.status(404).json({ error: 'Usuário não encontrado.' });

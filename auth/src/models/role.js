@@ -1,4 +1,5 @@
-const pool = require('../config/db');
+// const pool = require('../config/db');
+const { getPool } = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 
 class Role {
@@ -18,7 +19,7 @@ class Role {
             RETURNING id, name
         `;
         const values = [id, name];
-
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
@@ -26,6 +27,7 @@ class Role {
     static async updateById(id, name) {
         const query = `UPDATE tb_role SET name = $1 WHERE id = $2 RETURNING id, name`;
         const values = [name, id];
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
@@ -33,6 +35,7 @@ class Role {
     static async findByName(name) {
         const query = 'SELECT id FROM tb_role WHERE name ILIKE $1';
         const values = [name];
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
@@ -40,12 +43,14 @@ class Role {
     static async findById(id) {
         const query = 'SELECT * FROM tb_role WHERE id = $1';
         const values = [id];
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rows[0];
     }
 
     static async findAll() {
         const query = 'SELECT * FROM tb_role';
+        const pool = getPool();
         const result = await pool.query(query);
         return result.rows;
     }
@@ -53,6 +58,7 @@ class Role {
     static async deleteById(id) {
         const query = 'DELETE FROM tb_role WHERE id = $1';
         const values = [id];
+        const pool = getPool();
         const result = await pool.query(query, values);
         return result.rowCount > 0;
     }
@@ -64,7 +70,7 @@ class Role {
                 values: [userId, roleId]
             };
         });
-    
+        const pool = getPool();
         for (const { query, values } of queries) {
             await pool.query(query, values);
         }
@@ -73,6 +79,7 @@ class Role {
     static async removeRoleFromUser(userId, roleId) {
         const query = 'DELETE FROM tb_user_role WHERE user_id = $1 AND role_id = $2';
         const values = [userId, roleId];
+        const pool = getPool();
         await pool.query(query, values);
     }
 }
