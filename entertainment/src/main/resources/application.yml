@@ -9,8 +9,6 @@ spring:
   # config
   config:
     import: optional:configserver:http://localhost:8071
-    #username: admin #admin
-    #password: Teste@123 #Teste@123
 
   # cloud
   cloud:
@@ -20,6 +18,8 @@ spring:
       profile: entertainment
       fail-fast: true
       enabled: true
+      username: admin
+      password: Teste@123
 
   # actuator
   management:

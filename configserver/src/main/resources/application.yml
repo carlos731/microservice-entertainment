@@ -10,10 +10,11 @@ spring:
           search-locations: "classpath:/config"
 
   # security
-#  security:
-#    user:
-#      name: user
-#      password: password
+  security:
+    enabled: false
+    user:
+      name: "{cipher}b3ea4475f6a539063da02d005e7259df781d187440bf8ddf60b641790d5063eb" #admin
+      password: "{cipher}53527bce47a577d2234725a88a57d18e982d72065f1b6e912588ebea555945e8" #Teste@123
 
 management:
   endpoints:
