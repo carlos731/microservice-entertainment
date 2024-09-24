@@ -1,5 +1,6 @@
 package com.microservice.entertainment;
 
+import com.microservice.entertainment.config.ConfigProperties;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -38,6 +39,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 		scheme = "bearer",
 		bearerFormat = "JWT"
 )
+@EnableConfigurationProperties(value = {ConfigProperties.class})
 public class EntertainmentApplication {
 
 	public static void main(String[] args) {

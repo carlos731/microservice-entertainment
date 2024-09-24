@@ -1,13 +1,38 @@
+server:
+  port: ${config.server.port}
+
 spring:
   # application
   application:
     name: entertainment
 
+  # config
+  config:
+    import: optional:configserver:http://localhost:8071
+    #username: admin #admin
+    #password: Teste@123 #Teste@123
+
+  # cloud
+  cloud:
+    config:
+      uri: http://localhost:8071
+      name: config
+      profile: entertainment
+      fail-fast: true
+      enabled: true
+
+  # actuator
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: env
+
   # database
   datasource:
-    url: jdbc:postgresql://localhost:5432/db_entertainment
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://${config.db.host}:${config.db.port}/${config.db.name}
+    username: ${config.db.user}
+    password: ${config.db.password}
     driver-class-name: org.postgresql.Driver
     #hikari:
       #maximum-pool-size: 10
@@ -27,4 +52,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          secret-key: "your-long-secret-key-that-has-32-or-more-characters"
+          secret-key: ${config.jwt.secret}

@@ -1,0 +1,14 @@
+build:
+  version: "1.0"
+
+config:
+  server:
+    port: "{cipher}66cfd739b56fa160ca5b1b3aa13cd1a37ed5e56f3d25ba21e0233ff8e867c75f"
+    message: "Welcome to the gateway service"
+    contactDetails:
+      name: "Carlos Henrique"
+      email: "carlos@gmail.com"
+    onCallSupport:
+      - +55 (21) 99665-1234
+  jwt:
+    secret: "{cipher}81c13fa35aba36d1617c957320bf379baf291084ee65563b9fd67e562604d70f5dbb0642f3590a5267b3e8b51b3746ab941d8df9534336a81ab8a4096470136a061a9d63baef9dddd9f2028bb8e230ff"
