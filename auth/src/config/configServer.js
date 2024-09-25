@@ -16,7 +16,7 @@ const configServer = async () => {
         console.error('Conectado ao servidor de configuração.');
         setConfig(response.data.propertySources[0].source);
     } catch (error) {
-        console.error('Falha em se conectar ao Servidor de configuração.', error);
+        console.error('Falha em se conectar ao Servidor de configuração.');
         process.exit(1);
     }
 };

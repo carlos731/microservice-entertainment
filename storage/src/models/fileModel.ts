@@ -1,4 +1,4 @@
-import pool from '../db';
+import { getPool } from "../db";
 
 export class FileModel {
   id: string;
@@ -46,7 +46,7 @@ export class FileModel {
       file.createdAt,
       file.updatedAt
     ];
-
+    const pool = getPool();
     await pool.query(query, values);
   }
 
@@ -66,7 +66,7 @@ export class FileModel {
       file.contentType,
       file.updatedAt || null
     ];
-
+    const pool = getPool();
     const result = await pool.query(query, values);
 
     if (result.rowCount === 0) {
@@ -79,6 +79,7 @@ export class FileModel {
     page: number = 1,
     size: number = 10
   ): Promise<{ results: FileModel[], pageMetadata: { size: number, totalElements: number, totalPages: number, number: number } }> {
+    const pool = getPool();
     const offset = (page - 1) * size;
 
     // Conta o total de elementos
@@ -122,6 +123,7 @@ export class FileModel {
 
   static async findById(id: string): Promise<FileModel | null> {
     const query = 'SELECT * FROM tb_files WHERE id = $1';
+    const pool = getPool();
     const result = await pool.query(query, [id]);
 
     if (result.rows.length > 0) {
@@ -142,6 +144,7 @@ export class FileModel {
   }
 
   static async deleteById(id: string): Promise<void> {
+    const pool = getPool();
     const query = 'DELETE FROM tb_files WHERE id = $1';
 
     try {
