@@ -95,7 +95,7 @@ router.post('/upload-multiple', authenticateToken, authorizePermissions('upload:
  *       500:
  *         description: Erro no servidor
  */
-router.post('/upload', /*authenticateToken, authorizePermissions('upload_file'),*/ upload.single('file'), uploadFile);
+router.post('/upload', authenticateToken, authorizePermissions('upload:file'), upload.single('file'), uploadFile);
 
 /**
  * @swagger
@@ -143,7 +143,7 @@ router.post('/upload', /*authenticateToken, authorizePermissions('upload_file'),
  *       500:
  *         description: Erro no servidor
  */
-router.put('/update/:id', /*authenticateToken, authorizePermissions('update_file'),*/ upload.single('file'), updateFileById);
+router.put('/update/:id', authenticateToken, authorizePermissions('update:file'), upload.single('file'), updateFileById);
 
 /**
  * @swagger
@@ -205,7 +205,7 @@ router.put('/update/:id', /*authenticateToken, authorizePermissions('update_file
  *       500:
  *         description: Erro no servidor
  */
-router.get('/files', /*authenticateToken,*/ getFiles);
+router.get('/files', authenticateToken, getFiles);
 
 /**
  * @swagger
@@ -232,7 +232,7 @@ router.get('/files', /*authenticateToken,*/ getFiles);
  *       500:
  *         description: Erro no servidor
  */
-router.get('/file/:id', /*authenticateToken,*/ getFileById);
+router.get('/file/:id', authenticateToken, getFileById);
 
 /**
  * @swagger

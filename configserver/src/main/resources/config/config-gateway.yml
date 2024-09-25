@@ -3,7 +3,7 @@ build:
 
 config:
   server:
-    port: "{cipher}66cfd739b56fa160ca5b1b3aa13cd1a37ed5e56f3d25ba21e0233ff8e867c75f"
+    port: "{cipher}d57fef34fcc3bd32bbe9802d3f91137f240b193365c4a6546ac494dd1701a4b6"
     message: "Welcome to the gateway service"
     contactDetails:
       name: "Carlos Henrique"

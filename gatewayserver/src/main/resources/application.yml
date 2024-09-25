@@ -1,0 +1,202 @@
+server:
+  port: 8045
+
+spring:
+  application:
+    name: gatewayserver
+
+  # config
+  config:
+    import: optional:configserver:http://localhost:8071
+
+  # cloud
+  cloud:
+    config:
+      uri: http://localhost:8071
+      name: config
+      profile: gateway
+      fail-fast: true
+      enabled: false
+      username: admin
+      password: Teste@123
+
+    # Gateway
+    gateway:
+      routes:
+        # storage
+        - id: storage-service
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/**
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # entertainment
+        - id: entertainment-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # upload-file
+        - id: storage-upload
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/upload
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - POST
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # update-file
+        - id: storage-update-id
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/update/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - PUT
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # find-all
+        - id: storage-find-all
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/files/**
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # find-image-default
+        - id: storage-find-image-default
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/image/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # find-image-params
+        - id: storage-find-image
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/image/{width}x{height}/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # find-video
+        - id: storage-find-video
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/video/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # download-file
+        - id: storage-download-id
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/download/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - GET
+              allowedHeaders: '*'
+              maxAge: 30
+
+        # delete-file
+        - id: storage-delete-id
+          uri: http://localhost:9000
+          predicates:
+            - Path=/storage/delete/{id}
+          filters:
+            - name: AddTokenHeaderFilter
+          metadata:
+            cors:
+              allowedOrigins:
+                - 'http://localhost:3000'
+                - 'http://localhost:4200'
+              allowedMethods:
+                - DELETE
+              allowedHeaders: '*'
+              maxAge: 30
