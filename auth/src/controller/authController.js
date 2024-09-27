@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Role = require('../models/role');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { uploadFile } = require('../services/uploadService');
 
 const saltRounds = parseInt(process.env.BYCRIPT) || 10;
 const secretKey = process.env.BYCRIPT_KEY || 'sua_chave_secreta';
@@ -12,16 +13,37 @@ const { getSecretJwt } = require('../context/configContext');
 
 class AuthController {
     static async register(req, res) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            const errorMessages = errors.array().map((error) => ({
-                field: error.path,
-                message: error.msg,
-            }));
-            return res.status(400).json({ errors: errorMessages });
+        const { firstname, lastname, email, password } = req.body;
+        let avatarUrl = null;
+
+        const errors = [];
+
+        // Validação manual
+        if (!firstname) {
+            errors.push({ message: "Firstname is required" });
+        }
+        if (!lastname) {
+            errors.push({ message: "Lastname is required" });
+        }
+        if (!email) {
+            errors.push({ message: "Email is required" });
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            errors.push({ message: "Please enter a valid email address" });
+        }
+        if (!password) {
+            errors.push({ message: "Password is required" });
+        } else {
+            if (password.length < 8) {
+                errors.push({ message: "Password must be at least 8 characters" });
+            }
+            if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[!@#$%^&*]/.test(password)) {
+                errors.push({ message: "Password must contain at least one uppercase, one lowercase, and one symbol." });
+            }
         }
 
-        const { firstname, lastname, email, password, avatar } = req.body;
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
 
         try {
             const existingUser = await User.findByEmail(email);
@@ -29,8 +51,17 @@ class AuthController {
                 return res.status(400).json({ error: 'Email já está em uso.' });
             }
 
+            if (req.file) {
+                const { originalname, mimetype, buffer } = req.file;
+                avatarUrl = await uploadFile({
+                    filename: originalname,
+                    contentType: mimetype,
+                    buffer
+                });
+            }
+
             const hashedPassword = await bcrypt.hash(password, saltRounds);
-            const user = await User.register(firstname, lastname, email, hashedPassword, avatar);
+            const user = await User.register(firstname, lastname, email, hashedPassword, avatarUrl);
 
             const roleUser = await Role.findByName('User');
             //const roleAdmin = await Role.findByName('Admin');
