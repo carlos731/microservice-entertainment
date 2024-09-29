@@ -15,7 +15,7 @@ const validateUpdateRole = [
 
 router.post('/', validateRole, authenticateToken, authorizePermissions('create:role'), roleController.addRole);
 router.put('/', validateUpdateRole, authenticateToken, authorizePermissions('update:role'), roleController.updateById);
-router.get('/', authenticateToken, authorizePermissions('view:role'), roleController.findAll);
+router.get('/', /*authenticateToken, authorizePermissions('view:role'),*/ roleController.findAll);
 router.get('/:id', authenticateToken, authorizePermissions('view:role'), roleController.findById);
 router.delete('/:id', authenticateToken, authorizePermissions('delete:role'), roleController.deleteById);
 

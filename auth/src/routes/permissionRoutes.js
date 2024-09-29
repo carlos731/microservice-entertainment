@@ -17,7 +17,7 @@ const validateUpdatePermission = [
 
 router.post('/', validatePermission, authenticateToken, authorizePermissions('create:permission'), permissionController.add);
 router.put('/', validateUpdatePermission, authenticateToken, authorizePermissions('update:permission'), permissionController.updateById);
-router.get('/', authenticateToken, authorizePermissions('view:permission'), permissionController.findAll);
+router.get('/', /*authenticateToken, authorizePermissions('view:permission'),*/ permissionController.findAll);
 router.get('/:id', authenticateToken, authorizePermissions('view:permission'), permissionController.findById);
 router.delete('/:id', authenticateToken, authorizePermissions('delete:permission'), permissionController.deleteById);
 

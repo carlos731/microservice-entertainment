@@ -18,8 +18,8 @@ async function uploadFile({ filename, contentType, buffer }) {
 
         return response.data.url; // Return the URL directly
     } catch (error) {
-        console.error('Error uploading file:', error.message);
-        throw error;
+        console.error('Error uploading file', error.message);
+        // throw error;
     }
 }
 

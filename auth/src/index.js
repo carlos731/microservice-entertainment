@@ -25,7 +25,7 @@ const startServer = async () => {
 
         // Agora que as configurações estão carregadas, você pode usar o pool
         app.use(cors());
-        app.use(express.urlencoded({ extended: true }));
+        // app.use(express.urlencoded({ extended: true }));
         app.use(express.json());
         app.use(limiter);
 

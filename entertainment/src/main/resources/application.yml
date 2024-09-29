@@ -53,3 +53,9 @@ spring:
       resourceserver:
         jwt:
           secret-key: ${config.jwt.secret}
+
+  # MultipartFile
+  servlet:
+    multipart:
+      max-file-size: 6GB
+      max-request-size: 6GB

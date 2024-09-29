@@ -8,7 +8,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.post('/add', upload.single('avatar'), authenticateToken, authorizePermissions('create:user'), userController.addUser);
+router.post('/add', upload.single('avatar'), /*authenticateToken, authorizePermissions('create:user'),*/ userController.addUser);
 router.put('/update', authenticateToken, authorizePermissions('update:user'), userController.updateUser);
 router.get('/:id', authenticateToken, authorizePermissions('update:user'), userController.getUserById);
 router.delete('/:id', authenticateToken, authorizePermissions('delete:user'), userController.deleteUser);

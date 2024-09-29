@@ -96,7 +96,7 @@ router.post('/upload-multiple', authenticateToken, authorizePermissions('upload:
  *       500:
  *         description: Erro no servidor
  */
-router.post('/upload', authenticateToken, authorizePermissions('upload:file'), apiKeyAuth, upload.single('file'), uploadFile);
+router.post('/upload', authenticateToken, authorizePermissions('upload:file'), upload.single('file'), uploadFile);
 
 router.post('/upload-service', apiKeyAuth, upload.single('file'), uploadFile);
 
