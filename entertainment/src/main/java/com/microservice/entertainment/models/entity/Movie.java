@@ -15,7 +15,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "entertainment_id", referencedColumnName = "entertainment_id")
     private Entertainment entertainment;
     private String trailer;

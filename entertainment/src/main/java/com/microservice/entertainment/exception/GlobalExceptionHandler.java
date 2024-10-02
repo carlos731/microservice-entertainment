@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -62,6 +63,19 @@ public class GlobalExceptionHandler {
                 request.getDescription(false)
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //Unauthorized
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ErrorResponse> uns(LockedException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now().toEpochMilli(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                "Você não está autenticado.",
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     // Exception handler para erro 403 Forbidden

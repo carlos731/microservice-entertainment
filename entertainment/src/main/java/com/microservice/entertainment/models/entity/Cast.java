@@ -16,10 +16,10 @@ public class Cast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cast_id")
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "entertainment_id", referencedColumnName = "entertainment_id")
     private Entertainment entertainmentId;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person personId;
     private String character;

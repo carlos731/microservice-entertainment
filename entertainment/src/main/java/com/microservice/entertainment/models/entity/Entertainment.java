@@ -72,4 +72,7 @@ public class Entertainment {
             inverseJoinColumns = {@JoinColumn(name = "genre_id", referencedColumnName = "genre_id")}
     )
     private List<Genre> genres;
+
+    @OneToOne(mappedBy = "entertainment", cascade = CascadeType.REMOVE)
+    private Movie movie;
 }
