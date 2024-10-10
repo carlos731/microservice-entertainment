@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/movie")
@@ -72,10 +70,20 @@ public class MovieController {
         }
 
         // Upload do arquivo
-        String posterImgUrl = uploadService.upload(posterImg);
-        String coverImgUrl = uploadService.upload(coverImg);
-        String trailerUrl = uploadService.upload(trailer);
-        String videoUrl = uploadService.upload(video);
+        String posterImgUrl = null;
+        String coverImgUrl = null;
+        String trailerUrl = null;
+        String videoUrl = null;
+        try {
+            posterImgUrl = uploadService.upload(posterImg);
+            coverImgUrl = uploadService.upload(coverImg);
+            trailerUrl = uploadService.upload(trailer);
+            videoUrl = uploadService.upload(video);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Upload service is currently unavailable. Please try again later.");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+        }
 
         // instanciar
         // entertainment

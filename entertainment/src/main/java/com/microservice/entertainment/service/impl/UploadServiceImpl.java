@@ -58,4 +58,41 @@ public class UploadServiceImpl implements UploadService {
             throw new IOException("Error during file upload: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public String updateFile(String id, MultipartFile file, String token) throws IOException {
+        String updateUrl = "http://localhost:9000/storage/update/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token); // Usando o token no header
+
+        // Converter o arquivo MultipartFile para um byte array
+        byte[] fileBytes = file.getBytes();
+        ByteArrayResource resource = new ByteArrayResource(fileBytes) {
+            @Override
+            public String getFilename() {
+                return file.getOriginalFilename();
+            }
+        };
+
+        // Criar o corpo da requisição
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", resource);
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<Map> responseEntity = restTemplate.exchange(updateUrl, HttpMethod.PUT, requestEntity, Map.class);
+
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                Map responseBody = responseEntity.getBody();
+                return (String) responseBody.get("url"); // ou outro campo relevante
+            } else {
+                String errorMessage = responseEntity.getBody() != null ? responseEntity.getBody().toString() : "Failed to update file";
+                throw new IOException("Update failed: " + errorMessage);
+            }
+        } catch (Exception e) {
+            throw new IOException("Error during file update: " + e.getMessage(), e);
+        }
+    }
 }
